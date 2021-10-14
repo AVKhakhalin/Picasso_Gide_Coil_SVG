@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 //import coil.ImageLoader
 //import coil.decode.SvgDecoder
@@ -25,6 +25,8 @@ class ResultCurrentFragment: Fragment() {
             return bindingReal!!
         }
 
+    private var starTransformation: StarTransformation = StarTransformation()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,13 +41,12 @@ class ResultCurrentFragment: Fragment() {
         renderData()
     }
 
-
     private fun renderData() {
 
         bindingReal?.let{
             it.resultCurrentConstraintLayoutCityName?.text = "Москва"
-            it.resultCurrentConstraintLayoutCityCoordinates?.text = "55"
-            it.resultCurrentConstraintLayoutTemperatureValue?.text = "55"
+//            it.resultCurrentConstraintLayoutCityCoordinates?.text = "55"
+//            it.resultCurrentConstraintLayoutTemperatureValue?.text = "55"
             it.resultCurrentConstraintLayoutFeelslikeValue?.text = "Россия"
         }
 
@@ -61,6 +62,7 @@ class ResultCurrentFragment: Fragment() {
 
         // СПОСОБ ЗАГРУЗКИ РАСТРОВОГО JPG, PNG
 
+        // Рисование обысной звезды
         Picasso
             .get()
 //            .load("https://c1.staticflickr.com/1/186/31520440226_175445c41a_b.jpg")
@@ -68,9 +70,42 @@ class ResultCurrentFragment: Fragment() {
 //            .load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
             .load(R.drawable.red)
 //            .transform(CircleTransformation())
-            .transform(StarTransformation())
+            .transform(starTransformation)
 //            .rotate(90f)
             .into(bindingReal?.resultImageFeels)
+
+        // Рисование звезды с изменёнными радиусами
+        Picasso
+            .get()
+            .load(R.drawable.red_inverted)
+            .transform(starTransformation)
+            .into(bindingReal?.resultImageFeelsInvert)
+
+        // Установка отображений звёзд
+        bindingReal?.resultImageFeels!!.visibility = View.VISIBLE
+        bindingReal?.resultImageFeelsInvert!!.visibility = View.GONE
+
+        // Установка обработчиков событий на звёзды
+        bindingReal?.resultImageFeels!!.setOnClickListener {
+            Toast.makeText(requireContext(), "А во лбу", Toast.LENGTH_SHORT).show()
+            if (bindingReal?.resultImageFeels!!.visibility == View.VISIBLE) {
+                bindingReal?.resultImageFeels!!.visibility = View.GONE
+                bindingReal?.resultImageFeelsInvert!!.visibility = View.VISIBLE
+            } else {
+                bindingReal?.resultImageFeels!!.visibility = View.VISIBLE
+                bindingReal?.resultImageFeelsInvert!!.visibility = View.GONE
+            }
+        }
+        bindingReal?.resultImageFeelsInvert!!.setOnClickListener {
+            Toast.makeText(requireContext(), "Звезда горит", Toast.LENGTH_SHORT).show()
+            if (bindingReal?.resultImageFeelsInvert!!.visibility == View.VISIBLE) {
+                bindingReal?.resultImageFeelsInvert!!.visibility = View.GONE
+                bindingReal?.resultImageFeels!!.visibility = View.VISIBLE
+            } else {
+                bindingReal?.resultImageFeelsInvert!!.visibility = View.VISIBLE
+                bindingReal?.resultImageFeels!!.visibility = View.GONE
+            }
+        }
 
 
 

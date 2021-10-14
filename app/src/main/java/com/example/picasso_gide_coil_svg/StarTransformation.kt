@@ -8,16 +8,21 @@ import com.squareup.picasso.Transformation
 
 // Класс - рамка в виде звезды для картинки
 class StarTransformation: Transformation {
+
+    private var isInvertedStar: Boolean = true
+
     override fun transform(source: Bitmap): Bitmap {
 // Определяем шаблон обрезки...
         val path = Path()
 // ...как звезда
+        // Инвертирование звезды
+        isInvertedStar = !isInvertedStar
         // Большой радиус звезды
-        val radiusLarge: Float = source.height.toFloat() / 2
+        var radiusLarge: Float = source.height.toFloat() / 2
         // Малый радиус звезды
-        val radiusSmall: Float = source.height.toFloat() / 5
+        var radiusSmall: Float = source.height.toFloat() / 5
         // число вершин
-        val numberPoints: Int = 5
+        val numberPoints: Int = if (isInvertedStar) 5 else 50
         // Начальная координата x
         val startX: Float = (source.height / 2).toFloat()
         // Начальная координата y
