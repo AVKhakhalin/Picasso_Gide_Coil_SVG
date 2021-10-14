@@ -1,0 +1,2 @@
+rootProject.name = "Picasso_Gide_Coil_SVG"
+include ':app'
